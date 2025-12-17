@@ -1,7 +1,7 @@
 // import { useState } from "react";
 // 'use client'
 import { createClient } from "@/lib/supabaseClient";
-import { getAnnouncements, logout } from "./action";
+// import { getAnnouncements, logout } from "./action";
 // import { useEffect, useState } from "react";
 
 
