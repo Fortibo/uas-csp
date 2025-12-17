@@ -7,10 +7,10 @@ import { redirect } from "next/navigation";
 export async function getAnnouncements() {
   const supabase = await createClient();
 
-    const {data: {user},errorUser} = await supabase.auth.getUser();
-    if (errorUser) {
-      return { errorUser: errorUser.message };
-    }
+  const {data: {user}, error: userError} = await supabase.auth.getUser();
+  if (userError) {
+    return { error: userError.message };
+  }
 
   const { data, error } = await supabase
     .from('announcements')
