@@ -1,8 +1,8 @@
 // import { useState } from "react";
 // 'use client'
 import { createClient } from "@/lib/supabaseClient";
-// import { getAnnouncements, logout } from "./action";
-// import { useEffect, useState } from "react";
+import LogoutButton from "./LogoutButton";
+
 
 
 export default async function Dashboard() {
@@ -10,29 +10,29 @@ export default async function Dashboard() {
   
     const supabase = await createClient();
    
-       const {data: {user},errorUser} = await supabase.auth.getUser();
-       if (errorUser) {
-         return { errorUser: errorUser.message };
-       }
-   
-     const { data, error } = await supabase
-       .from('announcements')
-       .select('*')
-       .order('created_at', { ascending: false });
-     
-     if (error) {
-       return { error: error.message };
-     }
+  const {data: {user}, error: userError} = await supabase.auth.getUser();
+  if (userError) {
+    return <div className="p-8 text-red-600">Error: {userError.message}</div>;
+  }
+
+  const { data, error } = await supabase
+    .from('announcements')
+    .select('*')
+    .order('created_at', { ascending: false });
+  
+  if (error) {
+    return <div className="p-8 text-red-600">Error: {error.message}</div>;
+  }
      
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
       <p>Welcome, Successfully logged in as <span className="text-blue-600 font-bold">{user?.email}</span></p>
-    <button className=" bg-red-500 text-white py-2 px-3 rounded-lg " onClick={logout}>Logout</button>
-      <div className="mt-8">
+        <LogoutButton />
+      <div className="mt-8">    
         <h2 className="text-2xl font-bold mb-4">Announcements</h2>
-        {data.error ? (
-          <p className="text-red-600">{data.error}</p>
+        {error ? (
+          <p className="text-red-600">{error}</p>
         ) : (
           <div className="space-y-4">
             {data?.map((announcement) => (
